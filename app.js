@@ -5,27 +5,37 @@ function parseTransactions () {
  imports.parse(listAll);
 }
 
-function getBalances () {
-  imports.parse(getNames)
+function getBalances (number) {
+  imports.parse(getNames, number)
 }
 
-function getTransactions () {
-
+function getTransactions (array, balances) {
+  balances.forEach(function (person) {
+    var arrayOfTransactions = [];
+    for (var i = 0; i < array.length; i++) {
+      if (array[i].From == person.name) {
+        arrayOfTransactions.push(array[i].Date, array[i].Amount, array[i].Narrative);
+      }
+      person.transactions = arrayOfTransactions;
+    }
+  });
+  console.log(balances);
 }
 
 
-function getNames (array) {
-            console.log(array.length)
+function getNames (array, number) {
   var accounts = []
   for (var i = 0; i < array.length; i++) {
     accounts[i] = { name: array[i]["To"], amount: 0 }
   }
   accounts = removeDuplicates(accounts);
-  // console.log(accounts);
   plus = calculateBalance(array, accounts);
-  // console.log(plus);
   balances = calculateDeductions(array, plus);
-  console.log(balances);
+  if (number === "1") {
+    console.log(balances);
+  } else {
+   getTransactions(array, balances);
+  }
 }
 
 function removeDuplicates (array) {
@@ -45,6 +55,7 @@ function calculateBalance (array, accounts) {
     for (var i = 0; i < array.length; i++) {
       if (array[i].To === person.name) {
         person.amount = person.amount + Number(array[i].Amount);
+        person.amount = parseFloat(person.amount).toFixed(2);
       }
     }
   });
@@ -56,6 +67,7 @@ function calculateDeductions (array, accounts) {
     for (var i = 0; i < array.length; i++) {
       if (array[i].From === person.name) {
         person.amount = person.amount - Number(array[i].Amount);
+        person.amount = parseFloat(person.amount).toFixed(2);
       };
     };
   });
@@ -69,12 +81,8 @@ function listAll (array) {
 
 
 function runProgram () {
-  var option = importsMore.pickOption();
-  if (option === "1") {
-    getBalances();
-  }else if (option === "2") {
-    getTransactions()
-  }
+  var number = importsMore.pickOption();
+  getBalances(number);
 }
 
 runProgram();
