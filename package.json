@@ -6,6 +6,7 @@
   "dependencies": {
     "csv": "^0.3.7",
     "csvtojson": "^2.0.8",
+    "log4js": "^3.0.6",
     "readline-sync": "^1.4.9"
   },
   "devDependencies": {},

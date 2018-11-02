@@ -1,6 +1,8 @@
 const imports = require('./csvtojson.js');
 const importsMore = require('./interface.js');
 
+
+
 function parseTransactions () {
  imports.parse(listAll);
 }
@@ -81,6 +83,10 @@ function listAll (array) {
 
 
 function runProgram () {
+  var log4js = require('log4js');
+  var logger = log4js.getLogger();
+  logger.level = 'debug';
+  logger.debug("Program started");
   var number = importsMore.pickOption();
   getBalances(number);
 }
