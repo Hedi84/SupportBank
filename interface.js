@@ -16,9 +16,9 @@ function pickOption () {
 
 function pickYear () {
   var year = "";
-  console.log("What year? Enter 2013 or 2014");
+  console.log("What year? Enter 2013, 2014 or 2015");
   year = readline.prompt();
-  if (year === "2013" || year === "2014") {
+  if (year === "2015" || year === "2014" || year === "2013") {
     return year
   } else {
     console.log("That's not a valid year")

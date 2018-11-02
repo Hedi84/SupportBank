@@ -1,5 +1,7 @@
 const imports = require('./csvtojson.js');
 const importsMore = require('./interface.js');
+const importsJson = require('./JsonParse.js');
+const moment = require('moment');
 var log4js = require('log4js');
 var logger = log4js.getLogger();
 
@@ -27,7 +29,7 @@ function getTransactions (array, balances) {
     var arrayOfTransactions = [];
     for (var i = 0; i < array.length; i++) {
       if (array[i].From == person.name) {
-        arrayOfTransactions.push(array[i].Date, array[i].Amount, array[i].Narrative);
+        arrayOfTransactions.push(moment(array[i].Date).format("MMM Do YY"), array[i].Amount, array[i].Narrative);
       }
       person.transactions = arrayOfTransactions;
     }
