@@ -1,15 +1,26 @@
 const imports = require('./csvtojson.js');
 const importsMore = require('./interface.js');
+var log4js = require('log4js');
+var logger = log4js.getLogger();
+
+log4js.configure({
+    appenders: {
+        file: { type: 'fileSync', filename: 'debug.log' }
+    },
+    categories: {
+        default: { appenders: ['file'], level: 'debug'}
+    }
+});
 
 
+// function parseTransactions () {
+//  imports.parse(listAll);
+// }
 
-function parseTransactions () {
- imports.parse(listAll);
+function getBalances (year) {
+  imports.parse(getNames, year);
 }
 
-function getBalances (number) {
-  imports.parse(getNames, number)
-}
 
 function getTransactions (array, balances) {
   balances.forEach(function (person) {
@@ -25,7 +36,7 @@ function getTransactions (array, balances) {
 }
 
 
-function getNames (array, number) {
+function getNames (array) {
   var accounts = []
   for (var i = 0; i < array.length; i++) {
     accounts[i] = { name: array[i]["To"], amount: 0 }
@@ -33,11 +44,14 @@ function getNames (array, number) {
   accounts = removeDuplicates(accounts);
   plus = calculateBalance(array, accounts);
   balances = calculateDeductions(array, plus);
+  var number = importsMore.pickOption();
   if (number === "1") {
     console.log(balances);
-  } else {
+  } else if (number === "2") {
    getTransactions(array, balances);
-  }
+ } else {
+   console.log("whoops, I broke.")
+ }
 }
 
 function removeDuplicates (array) {
@@ -83,12 +97,10 @@ function listAll (array) {
 
 
 function runProgram () {
-  var log4js = require('log4js');
-  var logger = log4js.getLogger();
-  logger.level = 'debug';
-  logger.debug("Program started");
-  var number = importsMore.pickOption();
-  getBalances(number);
+  // logger.level = 'debug';
+  // logger.debug("Program started");
+  var year = importsMore.pickYear();
+  getBalances(year);
 }
 
 runProgram();

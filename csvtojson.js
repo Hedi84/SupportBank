@@ -1,15 +1,26 @@
 const csv = require('csvtojson')
-const csvFilePath='./dodgyTransactions2015.csv'
+const csvFilePath='./source.csv'
+const csvFilePath2='./dodgyTransactions2015.csv'
+
 const imports = require('./transaction.js')
 
-function parse (callback, number) {
-  csv()
-  .fromFile(csvFilePath)
-  .then(function(jsonObj){
-    const transactions = jsonObj
-  callback(transactions, number)
-  })
-
+function assignFile (fileName) {
+  if (fileName === "2014") {
+    return csvFilePath;
+  } else if (fileName === "2013") {
+    return csvFilePath2;
+  }
 }
+
+function parse (callback, fileName) {
+  let path = assignFile(fileName);
+  csv()
+  .fromFile(path)
+  .then(function(jsonObj){
+    var transactions = jsonObj;
+  callback(transactions);
+  });
+}
+
 
 exports.parse = parse;
